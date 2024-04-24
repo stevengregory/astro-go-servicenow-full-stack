@@ -38,14 +38,14 @@ func fetchFromServiceNow(c *gin.Context) {
 	client := resty.New()
 	username := viper.GetString("servicenow.username")
 	password := viper.GetString("servicenow.password")
-	baseURL := viper.GetString("servicenow.baseURL")
+	instance := viper.GetString("servicenow.instance")
 
 	client.SetBasicAuth(username, password)
 	userQuery := c.DefaultQuery("filter", "active=true")
 	limit := c.DefaultQuery("limit", "10")
 	fields := c.DefaultQuery("fields", "active,assigned_to,number,short_description,priority,sys_id")
 
-	fullURL := baseURL + "/api/now/table/incident"
+	fullURL := "https://" + instance + ".service-now.com/api/now/table/incident"
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Content-Type", "application/json").
