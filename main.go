@@ -34,6 +34,10 @@ func setupRouter() *gin.Engine {
 	return r
 }
 
+func buildURL(instance string) string {
+	return "https://" + instance + ".service-now.com/api/now/table/incident"
+}
+
 func fetchFromServiceNow(c *gin.Context) {
 	client := resty.New()
 	username := viper.GetString("servicenow.username")
@@ -45,7 +49,7 @@ func fetchFromServiceNow(c *gin.Context) {
 	limit := c.DefaultQuery("limit", "10")
 	fields := c.DefaultQuery("fields", "active,assigned_to,number,short_description,priority,sys_id")
 
-	fullURL := "https://" + instance + ".service-now.com/api/now/table/incident"
+	fullURL := buildURL(instance)
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Content-Type", "application/json").
