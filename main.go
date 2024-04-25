@@ -2,35 +2,28 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
+
+	"sn-go-api/internal/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-resty/resty/v2"
-	"github.com/spf13/viper"
 )
 
 func main() {
-	initConfig()
-	r := setupRouter()
+	snConfig := config.Init()
+	r := setupRouter(snConfig)
 	r.Run(":8080")
 }
 
-func initConfig() {
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
-
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %s", err)
-	}
-
-	viper.AutomaticEnv()
-}
-
-func setupRouter() *gin.Engine {
+func setupRouter(snConfig *config.ServiceNowConfig) *gin.Engine {
 	r := gin.Default()
-	r.GET("/incidents", fetchFromServiceNow)
+	v1 := r.Group("/v1")
+	{
+		v1.GET("/incidents", func(c *gin.Context) {
+			fetchFromServiceNow(c, snConfig)
+		})
+	}
 	return r
 }
 
@@ -38,18 +31,14 @@ func buildURL(instance string) string {
 	return "https://" + instance + ".service-now.com/api/now/table/incident"
 }
 
-func fetchFromServiceNow(c *gin.Context) {
+func fetchFromServiceNow(c *gin.Context, snConfig *config.ServiceNowConfig) {
 	client := resty.New()
-	username := viper.GetString("servicenow.username")
-	password := viper.GetString("servicenow.password")
-	instance := viper.GetString("servicenow.instance")
-
-	client.SetBasicAuth(username, password)
+	client.SetBasicAuth(snConfig.Username, snConfig.Password)
 	userQuery := c.DefaultQuery("filter", "active=true")
 	limit := c.DefaultQuery("limit", "10")
 	fields := c.DefaultQuery("fields", "active,assigned_to,number,short_description,priority,sys_id")
 
-	fullURL := buildURL(instance)
+	fullURL := buildURL(snConfig.Instance)
 	resp, err := client.R().
 		SetHeader("Accept", "application/json").
 		SetHeader("Content-Type", "application/json").
