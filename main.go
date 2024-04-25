@@ -18,11 +18,14 @@ func main() {
 
 func setupRouter(snConfig *config.ServiceNowConfig) *gin.Engine {
 	r := gin.Default()
-	v1 := r.Group("/v1")
+	api := r.Group("/api")
 	{
-		v1.GET("/incidents", func(c *gin.Context) {
-			fetchFromServiceNow(c, snConfig)
-		})
+		v1 := api.Group("/v1")
+		{
+			v1.GET("/incidents", func(c *gin.Context) {
+				fetchFromServiceNow(c, snConfig)
+			})
+		}
 	}
 	return r
 }
