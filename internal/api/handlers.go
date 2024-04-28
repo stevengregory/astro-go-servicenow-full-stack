@@ -28,6 +28,7 @@ func FetchIncidents(c *gin.Context, snConfig *config.ServiceNowConfig) {
 		SetQueryParam("sysparm_query", userQuery).
 		SetQueryParam("sysparm_limit", limit).
 		SetQueryParam("sysparm_fields", fields).
+		SetQueryParam("sysparm_display_value", "true").
 		Get(fullURL)
 
 	if err != nil {
