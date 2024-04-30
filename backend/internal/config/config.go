@@ -25,8 +25,8 @@ func Init() *ServiceNowConfig {
 	viper.AutomaticEnv()
 
 	return &ServiceNowConfig{
-		Username: viper.GetString("servicenow.username"),
-		Password: viper.GetString("servicenow.password"),
-		Instance: viper.GetString("servicenow.instance"),
+		Username: viper.GetString("username"),
+		Password: viper.GetString("password"),
+		Instance: viper.GetString("instance"),
 	}
 }
