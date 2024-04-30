@@ -1,3 +1,42 @@
-sn-go-api
-config.yaml
+# Go binary
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/backend/sn-go-api
+
+# Go packages
+*.o
+*.a
+*.test
+
+# Output directories
+/bin/
+/pkg/
+/dist/
+/output/
+
+# Config files
+/backend/config.yaml
+.env
+
+# Ignore compiled output
+*.out
+
+# IDE-specific files and directories
+.idea/
+.vscode/
+
+# Exclude generated files
+/generated/
+
+# Test data
+/data/
+
+# Temporary files
+/tmp/
+/temp/
+
+# Misc
 .DS_Store
