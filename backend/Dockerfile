@@ -18,8 +18,6 @@ WORKDIR /root/
 
 COPY --from=builder /app/myapp .
 
-COPY config.yaml /root/config.yaml
-
 RUN chmod +x myapp
 
 EXPOSE 8080

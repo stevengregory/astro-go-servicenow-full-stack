@@ -18,7 +18,7 @@ func Init() *ServiceNowConfig {
 	viper.AddConfigPath(".")
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file: %s", err)
+		log.Printf("Warning: Config file not found: %s; falling back to environment variables", err)
 	}
 
 	viper.SetEnvPrefix("SN")
