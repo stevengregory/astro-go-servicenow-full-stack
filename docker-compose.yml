@@ -1,0 +1,9 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - '8080:8080'
+    environment:
+      - SN_USERNAME=${SN_USERNAME}
+      - SN_PASSWORD=${SN_PASSWORD}
+      - SN_INSTANCE=${SN_INSTANCE}
