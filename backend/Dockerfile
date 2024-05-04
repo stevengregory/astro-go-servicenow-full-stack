@@ -8,7 +8,7 @@ RUN go mod tidy
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o myapp cmd/service/main.go
+RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o bin/incident-service cmd/service/main.go
 
 FROM alpine:latest
 
@@ -16,10 +16,10 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 
-COPY --from=builder /app/myapp .
+COPY --from=builder /app/bin/incident-service .
 
-RUN chmod +x myapp
+RUN chmod +x incident-service
 
 EXPOSE 8080
 
-CMD ["./myapp"]
+CMD ["./incident-service"]
