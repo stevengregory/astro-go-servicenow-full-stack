@@ -1,4 +1,5 @@
 FROM node:lts-alpine AS runtime
+
 WORKDIR /app
 
 COPY . .
@@ -12,4 +13,4 @@ ENV MODE=production
 
 EXPOSE 4321
 
-CMD npm run start
+CMD ["npm", "run", "start"]
