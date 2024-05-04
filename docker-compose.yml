@@ -5,3 +5,9 @@ services:
       - '8080:8080'
     env_file:
       - .env
+  frontend:
+    build: ./frontend
+    ports:
+      - '4321:4321'
+    depends_on:
+      - backend
