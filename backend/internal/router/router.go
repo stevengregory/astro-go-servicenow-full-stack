@@ -11,9 +11,13 @@ func SetupRouter(snConfig *config.ServiceNowConfig) *gin.Engine {
 	router := gin.Default()
 	apiGroup := router.Group("/api/v1")
 	{
-		apiGroup.GET("/incidents", func(c *gin.Context) {
-				api.FetchIncidents(c, snConfig)
-		})
+		apiGroup.GET("/incidents", getIncidents(snConfig))
 	}
 	return router
+}
+
+func getIncidents(snConfig *config.ServiceNowConfig) gin.HandlerFunc {
+  return func(c *gin.Context) {
+    api.FetchIncidents(c, snConfig)
+  }
 }
