@@ -17,7 +17,7 @@ func SetupRouter(snConfig *config.ServiceNowConfig) *gin.Engine {
 }
 
 func getIncidents(snConfig *config.ServiceNowConfig) gin.HandlerFunc {
-  return func(c *gin.Context) {
-    api.FetchIncidents(c, snConfig)
-  }
+	return func(c *gin.Context) {
+		api.FetchIncidents(c, snConfig)
+	}
 }
