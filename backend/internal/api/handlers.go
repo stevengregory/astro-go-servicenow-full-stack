@@ -31,6 +31,14 @@ func doRequest(client *resty.Client, url, userQuery, limit, fields string) (*res
 		Get(url)
 }
 
+func parseResponse(resp *resty.Response) (map[string]interface{}, error) {
+	var result map[string]interface{}
+	if err := json.Unmarshal(resp.Body(), &result); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func prepQueryParams(c *gin.Context) (string, string, string) {
 	userQuery := c.DefaultQuery("filter", "active=true")
 	limit := c.DefaultQuery("limit", "10")
@@ -47,8 +55,8 @@ func FetchIncidents(c *gin.Context, snConfig *config.ServiceNowConfig) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data from ServiceNow"})
 		return
 	}
-	var result map[string]interface{}
-	if err := json.Unmarshal(resp.Body(), &result); err != nil {
+	result, err := parseResponse(resp)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse response"})
 		return
 	}
