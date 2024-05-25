@@ -14,6 +14,12 @@ func buildURL(instance string) string {
 	return "https://" + instance + ".service-now.com/api/now/table/incident"
 }
 
+func configureClient(username, password string) *resty.Client {
+	client := resty.New()
+	client.SetBasicAuth(username, password)
+	return client
+}
+
 func doRequest(client *resty.Client, url, userQuery, limit, fields string) (*resty.Response, error) {
 	return client.R().
 		SetHeader("Accept", "application/json").
@@ -33,8 +39,7 @@ func prepQueryParams(c *gin.Context) (string, string, string) {
 }
 
 func FetchIncidents(c *gin.Context, snConfig *config.ServiceNowConfig) {
-	client := resty.New()
-	client.SetBasicAuth(snConfig.Username, snConfig.Password)
+	client := configureClient(snConfig.Username, snConfig.Password)
 	userQuery, limit, fields := prepQueryParams(c)
 	url := buildURL(snConfig.Instance)
 	resp, err := doRequest(client, url, userQuery, limit, fields)
