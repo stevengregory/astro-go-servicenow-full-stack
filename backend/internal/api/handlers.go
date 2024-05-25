@@ -25,12 +25,17 @@ func doRequest(client *resty.Client, url, userQuery, limit, fields string) (*res
 		Get(url)
 }
 
-func FetchIncidents(c *gin.Context, snConfig *config.ServiceNowConfig) {
-	client := resty.New()
-	client.SetBasicAuth(snConfig.Username, snConfig.Password)
+func prepQueryParams(c *gin.Context) (string, string, string) {
 	userQuery := c.DefaultQuery("filter", "active=true")
 	limit := c.DefaultQuery("limit", "10")
 	fields := c.DefaultQuery("fields", "active,assigned_to,number,short_description,priority,sys_id")
+	return userQuery, limit, fields
+}
+
+func FetchIncidents(c *gin.Context, snConfig *config.ServiceNowConfig) {
+	client := resty.New()
+	client.SetBasicAuth(snConfig.Username, snConfig.Password)
+	userQuery, limit, fields := prepQueryParams(c)
 	url := buildURL(snConfig.Instance)
 	resp, err := doRequest(client, url, userQuery, limit, fields)
 	if err != nil {
