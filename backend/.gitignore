@@ -11,12 +11,11 @@
 *.test
 
 # Output directories
-/backend/bin
-/backend/pkg/
-frontend/dist
+bin
+pkg/
 
 # Config files
-/backend/config.yaml
+config.yaml
 .env
 .env.production
 
@@ -37,18 +36,5 @@ frontend/dist
 /tmp/
 /temp/
 
-# Generated types
-frontend/.astro/
-
-# Dependencies
-frontend/node_modules/
-frontend/package-lock.json
-
-# Logs
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
-frontend/pnpm-debug.log*
-
-# Misc
+# MacOS-specific files
 .DS_Store
