@@ -5,20 +5,40 @@ interface Props {
   href: string;
 }
 
-const { href, title, body } = Astro.props;
+interface Incident {
+  active: string;
+  assigned_to: string;
+  caller_id: string;
+  description: string;
+  number: string;
+  opened_at: string;
+  priority: string;
+  short_description: string;
+  state: string;
+  sys_id: string;
+}
+
+const { href } = Astro.props;
+const apiUrl = 'http://localhost:8080/api/v1/incidents?limit=10';
+const response = await fetch(apiUrl);
+const data = await response.json();
+const incident = data.result;
 ---
 
-<li class="link-card">
-  <a href={href}>
-    <h2>
-      {title}
-      <span>&rarr;</span>
-    </h2>
-    <p>
-      {body}
-    </p>
-  </a>
-</li>
+{
+  incident.map((i: Incident) => (
+    <li class="link-card">
+      <a href={href}>
+        <h2>
+          {i.number}
+          <span> &rarr;</span>
+        </h2>
+        <p>{i.short_description}</p>
+      </a>
+    </li>
+  ))
+}
+
 <style>
   .link-card {
     list-style: none;
