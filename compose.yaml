@@ -6,8 +6,13 @@ services:
     env_file:
       - .env
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        - API_URL=http://backend:8080
     ports:
       - '4321:4321'
+    env_file:
+      - .env
     depends_on:
       - backend

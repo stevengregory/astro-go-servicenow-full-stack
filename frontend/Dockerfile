@@ -2,6 +2,10 @@ FROM node:lts-alpine AS runtime
 
 WORKDIR /app
 
+ARG API_URL=http://localhost:8080
+
+ENV PUBLIC_API_URL=$API_URL
+
 COPY . .
 
 RUN npm install
